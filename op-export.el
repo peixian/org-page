@@ -600,6 +600,17 @@ TODO: improve this function."
                                            " - " op/site-main-title))
                      ("author" (or user-full-name "Unknown Author")))))
                ("nav" (op/render-navigation-bar))
+               ;; ("content"
+               ;;  (op/render-content
+               ;;   "tag.mustache"
+               ;;   (ht ("tag-name" (car tag-list))
+               ;;       ("posts"
+               ;;        (mapcar
+               ;;         #'(lambda (attr-plist)
+               ;;             (ht ("post-uri" (plist-get attr-plist :uri))
+               ;;                 ("post-title" (plist-get attr-plist :title))
+               ;;                 ("post-date" (plist-get attr-plist :date))))
+               ;;         (cdr tag-list))))))
                ("content"
                 (op/render-content
                  "tag.mustache"
@@ -610,7 +621,10 @@ TODO: improve this function."
                            (ht ("post-uri" (plist-get attr-plist :uri))
                                ("post-title" (plist-get attr-plist :title))
                                ("post-date" (plist-get attr-plist :date))))
-                       (cdr tag-list))))))
+                       ;; Sort the posts by date
+                       (sort (cdr tag-list)
+                             #'(lambda (post1 post2)
+                                 (string> (plist-get post1 :date) (plist-get post2 :date)))))))))
                ("footer"
                 (op/render-footer
                  (ht ("show-meta" nil)
